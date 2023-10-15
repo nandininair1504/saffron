@@ -16,9 +16,11 @@
             @endif
             <div class="row mb-3">
                 <div class="col-sm-4">
-                    <h2>All Projects @if(!empty($title))
-                            under {{ strtoupper($title) }}
-                        @endif</h2>
+                    @if(empty($title))
+                        <h2>All Projects</h2>
+                    @else
+                        <h2>{{ $title }} Projects</h2>
+                    @endif
                 </div>
                 @if(empty($title))
                     <div class="col-sm-4">

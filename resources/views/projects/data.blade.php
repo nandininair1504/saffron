@@ -16,7 +16,8 @@
         <td>{{ $startDate }}</td>
         <td>{{ $endDate }}</td>
         <td>
-            <a href="{{ route('projects.edit',['id' => $id]) }}"><i class="fa fa-edit"></i></a> | <a href="#" data-id="{{ $id }}" class="delete_project"><i class="fa fa-trash-o"></i></a>
+            <a href="{{ route('projects.edit',['id' => $id]) }}"><i class="fa fa-edit"></i></a> |
+            <a data-id="{{ $id }}" class="delete_project"><i class="fa fa-trash-o"></i></a>
         </td>
     </tr>
 @endforeach

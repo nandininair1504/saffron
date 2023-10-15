@@ -17,18 +17,30 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('categories', 'App\Http\Controllers\CategoryController@index')->name('categories.index');
-Route::get('categories/create', 'App\Http\Controllers\CategoryController@create')->name('categories.create');
-Route::post('categories/create', 'App\Http\Controllers\CategoryController@store')->name('categories.store');
-Route::get('categories/edit/{id}', 'App\Http\Controllers\CategoryController@edit')->name('categories.edit');
-Route::post('categories/edit/{id}', 'App\Http\Controllers\CategoryController@update')->name('categories.update');
-Route::get('categories/delete/{id}', 'App\Http\Controllers\CategoryController@delete')->name('categories.delete');
+Route::prefix('categories')
+       ->namespace('App\Http\Controllers')
+       ->name('categories.')
+       ->group(function() {
+           Route::get('/', 'CategoryController@index')->name('index');
+           Route::get('create', 'CategoryController@create')->name('create');
+           Route::post('create', 'CategoryController@store')->name('store');
+           Route::get('edit/{id}', 'CategoryController@edit')->name('edit');
+           Route::post('edit/{id}', 'CategoryController@update')->name('update');
+           Route::get('delete/{id}', 'CategoryController@delete')->name('delete');
+       });
 
-Route::get('projects', 'App\Http\Controllers\ProjectController@index')->name('projects.index');
-Route::get('projects/category/{category_slug}', 'App\Http\Controllers\ProjectController@index')->name('projects.category');
+Route::prefix('projects')
+    ->name('projects.')
+    ->namespace('App\Http\Controllers')
+    ->group(function() {
+        Route::get('/', 'ProjectController@index')->name('index');
+        Route::get('category/{category_slug}', 'ProjectController@index')->name('category');
+        Route::get('create', 'ProjectController@create')->name('create');
+        Route::post('create', 'ProjectController@store')->name('store');
+        Route::get('edit/{id}', 'ProjectController@edit')->name('edit');
+        Route::post('edit/{id}', 'ProjectController@update')->name('update');
+        Route::get('delete/{id}', 'ProjectController@delete')->name('delete');
+    });
 
-Route::get('projects/create', 'App\Http\Controllers\ProjectController@create')->name('projects.create');
-Route::post('projects/create', 'App\Http\Controllers\ProjectController@store')->name('projects.store');
-Route::get('projects/edit/{id}', 'App\Http\Controllers\ProjectController@edit')->name('projects.edit');
-Route::post('projects/edit/{id}', 'App\Http\Controllers\ProjectController@update')->name('projects.update');
-Route::get('projects/delete/{id}', 'App\Http\Controllers\ProjectController@delete')->name('projects.delete');
+
+
