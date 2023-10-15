@@ -7,6 +7,9 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Category;
 use App\Models\Project;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -138,6 +141,11 @@ class ProjectController extends Controller
         return redirect('projects')->with('success', 'Project Deleted Successfully');
     }
 
+    /**
+     * Bar chart for the monthly report of projects
+     *
+     * @return Application|Factory|View
+     */
     public function charts()
     {
         $projects = Project::selectRaw('MONTH(created_at) AS month, COUNT(*) AS count')
@@ -148,20 +156,6 @@ class ProjectController extends Controller
 
         $labels = [];
         $data = [];
-        $colors = [
-            '#808000',
-            '#FF0000',
-            '#FFA500',
-            '#FFFF00',
-            '#808000',
-            '#FF0000',
-            '#FFA500',
-            '#FFFF00',
-            '#808000',
-            '#FF0000',
-            '#FFA500',
-            '#FFFF00'
-        ];
 
         for ($i = 1; $i <= 12; $i++) {
             $month = date('F', mktime(0, 0, 0, $i, 1));
@@ -182,7 +176,6 @@ class ProjectController extends Controller
             [
                 'label' => 'Projects Report',
                 'data' => $data,
-                'colors' => $colors,
             ]
         ];
 

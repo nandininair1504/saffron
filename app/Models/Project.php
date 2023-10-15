@@ -25,4 +25,14 @@ class Project extends Model
     {
         return $this->belongsToMany(Category::class, 'category_project', 'project_id','category_id');
     }
+
+    /**
+     * Get teams for a project
+     *
+     * @return BelongsToMany
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_project', 'project_id','team_id');
+    }
 }
