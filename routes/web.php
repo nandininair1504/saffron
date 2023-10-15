@@ -40,7 +40,10 @@ Route::prefix('projects')
         Route::get('edit/{id}', 'ProjectController@edit')->name('edit');
         Route::post('edit/{id}', 'ProjectController@update')->name('update');
         Route::get('delete/{id}', 'ProjectController@delete')->name('delete');
+        Route::get('charts', 'ProjectController@charts')->name('charts');
     });
+
+
 
 
 

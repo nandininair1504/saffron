@@ -99,7 +99,9 @@ class ProjectController extends Controller
     {
         $categories = Category::all()->toArray();
         $project = Project::find($projectId);
-        $project->category_ids = $project->categories()->pluck('categories.id')->toArray();
+        $project->category_ids = $project->categories()
+            ->pluck('categories.id')
+            ->toArray();
 
         return view('projects.edit')->with('categories', $categories)->with('project', $project);
     }
@@ -117,7 +119,8 @@ class ProjectController extends Controller
 
         Project::where('id', $projectId)->update($inputs);
         $project = Project::find($projectId);
-        $project->categories()->sync($request->input('category', []));
+        $project->categories()
+                ->sync($request->input('category', []));
 
         return redirect('projects')->with('success', 'Project Updated Successfully');
     }
@@ -135,6 +138,58 @@ class ProjectController extends Controller
         return redirect('projects')->with('success', 'Project Deleted Successfully');
     }
 
+    public function charts()
+    {
+        $projects = Project::selectRaw('MONTH(created_at) AS month, COUNT(*) AS count')
+            ->whereYear('created_at', date('Y'))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $labels = [];
+        $data = [];
+        $colors = [
+            '#808000',
+            '#FF0000',
+            '#FFA500',
+            '#FFFF00',
+            '#808000',
+            '#FF0000',
+            '#FFA500',
+            '#FFFF00',
+            '#808000',
+            '#FF0000',
+            '#FFA500',
+            '#FFFF00'
+        ];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $month = date('F', mktime(0, 0, 0, $i, 1));
+            $count = 0;
+
+            foreach ($projects as $project) {
+                if ($project->month == $i) {
+                    $count = $project->count;
+                    break;
+                }
+            }
+
+            array_push($labels, $month);
+            array_push($data, $count);
+        }
+
+        $dataSets = [
+            [
+                'label' => 'Projects Report',
+                'data' => $data,
+                'colors' => $colors,
+            ]
+        ];
+
+        return view('projects.chart', compact('dataSets', 'labels'));
+
+    }
+
     /**
      * Image upload
      *
@@ -143,10 +198,10 @@ class ProjectController extends Controller
      */
     protected function uploadImage($request)
     {
-        if($request->file('image_path')){
-            $imageName = time().'.'.$request->image_path->extension();
+        if ($request->file('image_path')) {
+            $imageName = time() . '.' . $request->image_path->extension();
             $request->image_path->move(public_path('images'), $imageName);
-            $path = url('images/'.$imageName);
+            $path = url('images/' . $imageName);
             return $path;
         }
     }

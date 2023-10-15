@@ -38,6 +38,9 @@
                     <a href="{{ route('projects.create') }}" class="btn btn-warning">
                         Create Project
                     </a>
+                    <a href="{{ route('projects.charts') }}" class="btn btn-warning">
+                        Report
+                    </a>
                     <a class="btn btn-danger" href="{{ route('home') }}">Home</a>
                 </div>
             </div>
